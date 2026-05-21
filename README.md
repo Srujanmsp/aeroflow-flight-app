@@ -117,41 +117,31 @@ npm run lint     # TypeScript type check
 
 ### Environment Variables
 
-Copy `.env.example` to `.env.local` and fill in your Supabase credentials:
-
-```bash
-cp .env.example .env.local
-```
+Create a `.env.local` file in the root folder with these values:
 
 ```
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_URL=https://fwejcqeeqshxedrpdzyp.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3ZWpjcWVlcXNoeGVkcnBkenlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNDU1MDYsImV4cCI6MjA5NDkyMTUwNn0.ILJPIyos3s09pQ0gH-NQwjVa3Oa095kk3hPxcdR5F-o
 ```
-
-> **Note**: The app currently runs with a local in-memory simulation (`supabaseSim.ts`) that mirrors the full Supabase schema and behavior, including RLS policies, atomic RPCs, and the 2-hour cancellation constraint. Plugging in real Supabase credentials requires replacing `dbSim` calls with the `@supabase/supabase-js` client.
+- The anon key is safe to share publicly — Supabase is designed for this.
+- RLS policies ensure users can only access their own data.
 
 ---
 
 ## Supabase Migration Guide
 
-If deploying against a real Supabase project, run the migrations in order:
+Run the migrations in order using the Supabase SQL editor:
 
 ```bash
-# Using Supabase CLI
-supabase db push
-
-# Or manually in the Supabase SQL editor:
 # 1. supabase/migrations/20260520000001_initial_schema.sql
 # 2. supabase/migrations/20260520000002_triggers_and_rpcs.sql
 # 3. supabase/migrations/20260520000003_seed_data.sql
 ```
-
-This seeds 8 flights across 4 routes with a full seat map per flight.
+This creates all tables, RLS policies, triggers, RPCs, and seeds 8 flights across 4 routes with a full seat map per flight.
 
 **Test credentials** (seeded by migration 3):
 - Email: `user@aeroflow.com`
 - Password: `test1234`
-
 ---
 
 ## PWA Configuration
