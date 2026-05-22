@@ -3,7 +3,12 @@
 A fully responsive flight booking and management PWA built with React 19, TypeScript, Tailwind CSS v4, and Zustand. Users can search flights, select seats on an interactive map, book with passenger details, and manage their reservations (reschedule or cancel).
 
 ---
+## Live Demo
+- **Vercel Deployment**: [https://aeroflow-flight-app.vercel.app](https://aeroflow-flight-app.vercel.app)
 
+- **Local Dev**: [http://localhost:3000](http://localhost:3000)
+
+---
 ## Tech Stack
 
 - **Frontend**: React 19 + TypeScript
@@ -115,8 +120,6 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
 ### Other Commands
 
 ```bash
@@ -138,6 +141,12 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 ---
 
+## Test Account
+- **Email**: `user@aeroflow.com`
+- **Password**: `test1234`
+
+---
+
 ## Supabase Migration Guide
 
 Run the migrations in order using the Supabase SQL editor:
@@ -147,11 +156,8 @@ Run the migrations in order using the Supabase SQL editor:
 # 2. supabase/migrations/20260520000002_triggers_and_rpcs.sql
 # 3. supabase/migrations/20260520000003_seed_data.sql
 ```
-This creates all tables, RLS policies, triggers, RPCs, and seeds 8 flights across 4 routes with a full seat map per flight.
+This creates all tables, RLS policies, triggers, RPCs, and seeds 14 flights across 7 routes with a full seat map per flight.
 
-**Test credentials** (seeded by migration 3):
-- Email: `user@aeroflow.com`
-- Password: `test1234`
 ---
 
 ## PWA Configuration
@@ -183,7 +189,9 @@ Cache strategies (via service worker):
 
 **Sensitive data protection**: Passport numbers are explicitly excluded from localStorage via Zustand's `partialize` config, ensuring PII never persists in the browser.
 
-## 📊 Lighthouse Audit
+---
+
+## Lighthouse Audit
 
 ![Lighthouse Score](./lighthouse.png)
 
@@ -193,3 +201,5 @@ Cache strategies (via service worker):
 | Accessibility | 72 |
 | Best Practices | 100 |
 | SEO | 100 |
+
+---
