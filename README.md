@@ -57,6 +57,7 @@ aeroflow-flight-app/
 ├── vite.config.ts
 ├── tsconfig.json
 ├── package.json
+├── lighthouse.png 
 └── .env.example
 ```
 
