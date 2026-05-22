@@ -4,14 +4,15 @@ A fully responsive flight booking and management PWA built with React 19, TypeSc
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 - **Frontend**: React 19 + TypeScript
 - **Routing / Steps**: Zustand-driven multi-step flow (no external router needed)
 - **Styling**: Tailwind CSS v4 (via Vite plugin)
 - **State Management**: Zustand with `persist` middleware
-- **Database / Auth**: Supabase (PostgreSQL + RLS + Realtime) — simulated locally via `supabaseSim.ts`
+- **Database / Auth**: Supabase (PostgreSQL + RLS + Realtime)
 - **Bundler**: Vite 6
+- **PWA**: Custom service worker with offline support
 
 ---
 
@@ -19,30 +20,39 @@ A fully responsive flight booking and management PWA built with React 19, TypeSc
 
 ```
 aeroflow-flight-app/
-├── index.html
-├── vite.config.ts
-├── tsconfig.json
-├── package.json
-├── .env.example
+├── public/
+│   ├── manifest.json              # PWA manifest
+│   ├── offline.html               # Offline fallback page
+│   ├── sw.js                      # Service worker
+│   └── icons/
+│       ├── icon-192x192.png       # PWA icon
+│       └── icon-512x512.png       # PWA icon
 ├── supabase/
 │   └── migrations/
 │       ├── 20260520000001_initial_schema.sql     # Tables, indexes, constraints
 │       ├── 20260520000002_triggers_and_rpcs.sql  # RLS, triggers, seat-lock RPC
-│       └── 20260520000003_seed_data.sql          # 8 flights across 4 routes + seats
-└── src/
-    ├── main.tsx
-    ├── App.tsx              # Shell, nav, step routing
-    ├── store.ts             # Zustand stores (useFlightStore, useUserStore)
-    ├── types.ts             # Shared TypeScript interfaces
-    ├── supabaseSim.ts       # Local in-memory DB simulation (mirrors Supabase behavior)
-    └── components/
-        ├── SearchPage.tsx         # Flight search form
-        ├── ResultsPage.tsx        # Flight results listing
-        ├── SeatMap.tsx            # Interactive seat grid with Realtime simulation
-        ├── PassengerFormPage.tsx  # Passenger details form
-        ├── ConfirmationPage.tsx   # Booking confirmation + PNR
-        ├── MyBookingsPage.tsx     # Manage bookings (reschedule/cancel)
-        └── SupabaseTerminal.tsx   # Live DB query log viewer (dev tool)
+│       └── 20260520000003_seed_data.sql          # 14 flights across 7 routes + seats
+├── src/
+│   ├── main.tsx
+│   ├── App.tsx                    # Shell, nav, step routing
+│   ├── store.ts                   # Zustand stores (useFlightStore, useUserStore)
+│   ├── types.ts                   # Shared TypeScript interfaces
+│   ├── supabaseClient.ts          # Supabase client initialization
+│   ├── supabaseSim.ts             # Local in-memory DB simulation
+│   └── components/
+│       ├── SearchPage.tsx         # Flight search form
+│       ├── ResultsPage.tsx        # Flight results listing
+│       ├── SeatMap.tsx            # Interactive seat grid with Realtime
+│       ├── PassengerFormPage.tsx  # Passenger details form
+│       ├── ConfirmationPage.tsx   # Booking confirmation + PNR
+│       ├── MyBookingsPage.tsx     # Manage bookings (reschedule/cancel)
+│       ├── SupabaseTerminal.tsx   # Live DB query log viewer
+│       └── InstallPrompt.tsx      # PWA install banner
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
+├── package.json
+└── .env.example
 ```
 
 ---
