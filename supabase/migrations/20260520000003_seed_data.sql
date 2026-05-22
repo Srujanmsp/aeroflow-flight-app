@@ -184,3 +184,137 @@ SELECT seed_flight_seats('f1000000-0000-0000-0000-000000000008');
 
 -- Drop the temporary seeding helper function
 DROP FUNCTION seed_flight_seats(UUID);
+
+-- ============================================================
+-- Indian Routes (Added on top of existing international routes)
+-- Routes:
+-- 5. BLR -> DEL (Bengaluru to Delhi)
+-- 6. DEL -> BOM (Delhi to Mumbai)
+-- 7. BOM -> BLR (Mumbai to Bengaluru)
+-- ============================================================
+
+-- Flight 9: BLR -> DEL (Future, departing in 2 days)
+INSERT INTO flights (id, flight_no, origin, destination, departs_at, arrives_at, aircraft_type, status, base_price)
+VALUES (
+    'f1000000-0000-0000-0000-000000000009',
+    'AI-505',
+    'Bengaluru (BLR)',
+    'Delhi (DEL)',
+    NOW() + INTERVAL '2 days',
+    NOW() + INTERVAL '2 days' + INTERVAL '2 hours 45 minutes',
+    'Airbus A320neo',
+    'on-time',
+    4500.00
+);
+
+-- Flight 10: BLR -> DEL (Future, departing in 4 days)
+INSERT INTO flights (id, flight_no, origin, destination, departs_at, arrives_at, aircraft_type, status, base_price)
+VALUES (
+    'f1000000-0000-0000-0000-000000000010',
+    'AI-507',
+    'Bengaluru (BLR)',
+    'Delhi (DEL)',
+    NOW() + INTERVAL '4 days',
+    NOW() + INTERVAL '4 days' + INTERVAL '2 hours 45 minutes',
+    'Airbus A320neo',
+    'on-time',
+    3800.00
+);
+
+-- Flight 11: DEL -> BOM (Future, departing in 3 days)
+INSERT INTO flights (id, flight_no, origin, destination, departs_at, arrives_at, aircraft_type, status, base_price)
+VALUES (
+    'f1000000-0000-0000-0000-000000000011',
+    '6E-201',
+    'Delhi (DEL)',
+    'Mumbai (BOM)',
+    NOW() + INTERVAL '3 days',
+    NOW() + INTERVAL '3 days' + INTERVAL '2 hours 15 minutes',
+    'Airbus A320',
+    'on-time',
+    3200.00
+);
+
+-- Flight 12: DEL -> BOM (Future, departing in 5 days)
+INSERT INTO flights (id, flight_no, origin, destination, departs_at, arrives_at, aircraft_type, status, base_price)
+VALUES (
+    'f1000000-0000-0000-0000-000000000012',
+    '6E-203',
+    'Delhi (DEL)',
+    'Mumbai (BOM)',
+    NOW() + INTERVAL '5 days',
+    NOW() + INTERVAL '5 days' + INTERVAL '2 hours 15 minutes',
+    'Airbus A320',
+    'on-time',
+    2900.00
+);
+
+-- Flight 13: BOM -> BLR (Future, departing in 2 days)
+INSERT INTO flights (id, flight_no, origin, destination, departs_at, arrives_at, aircraft_type, status, base_price)
+VALUES (
+    'f1000000-0000-0000-0000-000000000013',
+    'SG-301',
+    'Mumbai (BOM)',
+    'Bengaluru (BLR)',
+    NOW() + INTERVAL '2 days' + INTERVAL '6 hours',
+    NOW() + INTERVAL '2 days' + INTERVAL '7 hours 45 minutes',
+    'Boeing 737-800',
+    'on-time',
+    3500.00
+);
+
+-- Flight 14: BOM -> BLR (Future, departing in 6 days)
+INSERT INTO flights (id, flight_no, origin, destination, departs_at, arrives_at, aircraft_type, status, base_price)
+VALUES (
+    'f1000000-0000-0000-0000-000000000014',
+    'SG-303',
+    'Mumbai (BOM)',
+    'Bengaluru (BLR)',
+    NOW() + INTERVAL '6 days',
+    NOW() + INTERVAL '6 days' + INTERVAL '1 hours 45 minutes',
+    'Boeing 737-800',
+    'on-time',
+    2800.00
+);
+
+-- Seed seats for all 6 new Indian flights
+CREATE OR REPLACE FUNCTION seed_flight_seats_indian(p_flight_id UUID)
+RETURNS VOID AS $$
+DECLARE
+    r INT;
+    col CHAR(1);
+BEGIN
+    -- First Class rows (1, 2)
+    FOR r IN 1..2 LOOP
+        FOR col IN SELECT unnest(string_to_array('A,B,C,D', ',')) LOOP
+            INSERT INTO seats (flight_id, seat_number, class, extra_fee, is_available)
+            VALUES (p_flight_id, r::text || col, 'first', 2000.00, TRUE);
+        END LOOP;
+    END LOOP;
+
+    -- Business Class rows (3, 4)
+    FOR r IN 3..4 LOOP
+        FOR col IN SELECT unnest(string_to_array('A,B,C,D', ',')) LOOP
+            INSERT INTO seats (flight_id, seat_number, class, extra_fee, is_available)
+            VALUES (p_flight_id, r::text || col, 'business', 1000.00, TRUE);
+        END LOOP;
+    END LOOP;
+
+    -- Economy Class rows (5 to 10)
+    FOR r IN 5..10 LOOP
+        FOR col IN SELECT unnest(string_to_array('A,B,C,D,E,F', ',')) LOOP
+            INSERT INTO seats (flight_id, seat_number, class, extra_fee, is_available)
+            VALUES (p_flight_id, r::text || col, 'economy', 0.00, (random() > 0.18));
+        END LOOP;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT seed_flight_seats_indian('f1000000-0000-0000-0000-000000000009');
+SELECT seed_flight_seats_indian('f1000000-0000-0000-0000-000000000010');
+SELECT seed_flight_seats_indian('f1000000-0000-0000-0000-000000000011');
+SELECT seed_flight_seats_indian('f1000000-0000-0000-0000-000000000012');
+SELECT seed_flight_seats_indian('f1000000-0000-0000-0000-000000000013');
+SELECT seed_flight_seats_indian('f1000000-0000-0000-0000-000000000014');
+
+DROP FUNCTION seed_flight_seats_indian(UUID);
