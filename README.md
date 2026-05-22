@@ -182,3 +182,14 @@ Cache strategies (via service worker):
 **PNR-level group booking**: Multiple passengers on the same booking share a PNR code. Reschedules update all seats under that PNR atomically — if any seat is unavailable on the new flight, the whole reschedule is rejected.
 
 **Sensitive data protection**: Passport numbers are explicitly excluded from localStorage via Zustand's `partialize` config, ensuring PII never persists in the browser.
+
+## 📊 Lighthouse Audit
+
+![Lighthouse Score](./lighthouse.png)
+
+| Category | Score |
+|---|---|
+| Performance | 90 |
+| Accessibility | 72 |
+| Best Practices | 100 |
+| SEO | 100 |
