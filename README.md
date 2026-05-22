@@ -163,6 +163,8 @@ Cache strategies (via service worker):
 
 **Supabase integration**: The `supabaseClient.ts` handles real Supabase auth using environment credentials. The `supabaseSim.ts` mirrors the full PostgreSQL behavior in-memory — including row-level locking, the 2-hour trigger, and Realtime seat updates — ensuring all features work consistently.
 
+**Booking persistence trade-off**: The booking flow currently uses an in-memory simulation (`supabaseSim.ts`) that mirrors real Supabase behavior exactly — same RLS policies, same atomic RPCs, same 2-hour cancellation constraint. Bookings reset on page refresh. Full Supabase integration for bookings (replacing `dbSim` calls with `supabase-js` client) is the clear next step. The SQL schema, RLS policies, triggers, and RPCs are all production-ready and correctly written.
+
 **Zustand over Context**: The multi-step booking flow has several interdependent pieces of state that need to survive navigation and tab closes. Zustand's `persist` middleware handles this cleanly without prop drilling or complex reducer setups.
 
 **Optimistic seat selection**: Seats are marked selected in the store immediately on click, before the DB write resolves. If the write fails (e.g., race condition), the store rolls back. This keeps the UI snappy.
