@@ -10,6 +10,7 @@ import MyBookingsPage from './components/MyBookingsPage';
 import SupabaseTerminal from './components/SupabaseTerminal';
 import { Plane, User, Calendar, ShieldCheck, CreditCard, RefreshCw, LogIn, ExternalLink, Moon, Sun } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
+import InstallPrompt from './components/InstallPrompt';
 
 export default function App() {
   const { currentStep, setStep } = useFlightStore();
@@ -32,10 +33,7 @@ export default function App() {
     };
   }, []);
 
-  const handleUserSwap = (email: string) => {
-    setSessionEmailInput(email);
-    login(email);
-  };
+
 
   const handleCustomLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -116,27 +114,22 @@ export default function App() {
           {/* User Session Switcher (Demonstrating RLS Row level security live!) */}
           <div className="flex items-center gap-3">
             {user ? (
-              <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900 p-1.5 rounded-xl border border-slate-201 dark:border-slate-800">
+              <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
                 <div className="w-7 h-7 rounded-lg bg-orange-100 dark:bg-orange-950 text-orange-600 flex items-center justify-center font-bold text-xs">
                   {user.email.substring(0, 1).toUpperCase()}
                 </div>
                 <div className="hidden lg:block text-left text-[10px] leading-tight pr-2">
-                  <span className="text-slate-400 block font-mono font-bold uppercase">Active Identity</span>
-                  <select
-                    value={user.email}
-                    onChange={(e) => handleUserSwap(e.target.value)}
-                    className="text-slate-850 dark:text-slate-200 font-bold bg-transparent border-none p-0 focus:outline-none focus:ring-0 text-[11px] cursor-pointer"
-                  >
-                    <option value="user@aeroflow.com">user@aeroflow.com</option>
-                    <option value="user@example.com">user@example.com</option>
-                  </select>
+                  <span className="text-slate-400 block font-mono font-bold uppercase">Logged In</span>
+                  <span className="text-slate-800 dark:text-slate-200 font-bold text-[11px] block truncate max-w-[140px]">
+                    {user.email}
+                  </span>
                 </div>
                 <button
                   onClick={logout}
                   className="text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 text-xs font-bold px-2 py-1 select-none cursor-pointer"
-                  title="Logout flight session"
+                  title="Logout"
                 >
-                  Clear
+                  Logout
                 </button>
               </div>
             ) : (
@@ -262,6 +255,7 @@ export default function App() {
           </aside>
         </div>
       </main>
+      <InstallPrompt />
     </div>
   );
 }
