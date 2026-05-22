@@ -4,7 +4,7 @@ A fully responsive flight booking and management PWA built with React 19, TypeSc
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend**: React 19 + TypeScript
 - **Routing / Steps**: Zustand-driven multi-step flow (no external router needed)
